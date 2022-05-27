@@ -1,1 +1,5 @@
 .vscode/
+*.o
+test
+test_5x5.txt
+test_5x1.txt
