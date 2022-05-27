@@ -8,6 +8,14 @@
 #include <vector>
 #include <iomanip>
 
+void set_Konstant_Vector(mapra::Vector A, double k)
+{
+  for (unsigned int i = 0; i < A.GetLength(); i++)
+  {
+    A(i) = k;
+  }
+}
+
 int main()
 {
 
@@ -15,9 +23,9 @@ int main()
   mapra::Vector v2(5);
   mapra::Vector v3(5);
   mapra::Vector v4(5);
-  v1.Zahl(5);
-  v2.Zahl(3);
-  v3.Zahl(2);
+  set_Konstant_Vector(v1, 5);
+  set_Konstant_Vector(v2, 3);
+  set_Konstant_Vector(v3, 2);
   v3(1) = 4;
   v3(2) = 5;
   v3(4) = 1;
