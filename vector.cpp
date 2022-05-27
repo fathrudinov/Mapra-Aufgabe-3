@@ -154,7 +154,7 @@ Vector mapra::operator-(const Vector &x, const Vector &y)
 
 // ----- Vorzeichen wechseln "-" -----
 
-Vector mapra::operator-(Vector &x)
+mapra::Vector mapra::operator-(const mapra::Vector &x)
 {
   Vector _x = x;
   _x *= -1;

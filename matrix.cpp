@@ -52,20 +52,58 @@ Matrix &Matrix::operator*=(const Matrix &x)
     return (*this);
 }
 
-Matrix &Matrix::operator*=(double)
+Matrix &Matrix::operator*=(double x)
 {
+    for (size_t i = 0; i < rows_; i++)
+        for (size_t j = 0; j < cols_; j++)
+            (*this)(i, j) *= x;
+    return *this;
 }
-Matrix &Matrix::operator/=(double)
+Matrix &Matrix::operator/=(double x)
 {
+    if (x == 0)
+    {
+        Matrix::MatError("Division durch 0 nicht definiert!");
+    }
+    for (size_t i = 0; i < rows_; i++)
+        for (size_t j = 0; j < cols_; j++)
+            (*this)(i, j) /= x;
+    return *this;
 }
 
-Matrix &Matrix::Redim(std::size_t, std::size_t)
+Matrix &Matrix::Redim(std::size_t r, std::size_t c)
 {
+    elems_.resize(r, std::vector<double>(c, 0));
+    rows_ = r;
+    cols_ = c;
+    return *this;
 }
 
-Matrix mapra::operator+(const Matrix &, const Matrix &);
-Matrix mapra::operator-(const Matrix &, const Matrix &);
-Matrix mapra::operator-(const Matrix &);
+Matrix mapra::operator+(const mapra::Matrix &x, const mapra::Matrix &y)
+{
+    if (x.rows_ != y.rows_ || x.cols_ != y.cols_)
+    {
+        mapra::Matrix::MatError("Dimensionen sind ungueltig!");
+    }
+    mapra::Matrix z = x;
+    return z += y;
+}
+
+Matrix mapra::operator-(const mapra::Matrix &x, const mapra::Matrix &y)
+{
+    if (x.rows_ != y.rows_ || x.cols_ != y.cols_)
+    {
+        mapra::Matrix::MatError("Dimensionen sind ungueltig!");
+    }
+    mapra::Matrix z = x;
+    return z -= y;
+}
+
+Matrix mapra::operator-(const mapra::Matrix &x)
+{
+    mapra::Matrix z = x;
+    return z *= (-1);
+}
 
 Matrix mapra::operator*(const Matrix &A, const Matrix &B)
 {
@@ -81,12 +119,46 @@ Matrix mapra::operator*(const Matrix &A, const Matrix &B)
                 C(i, j) += A(i, k) * B(k, j);
     return C;
 }
-Matrix mapra::operator*(double, const Matrix &);
-Matrix mapra::operator*(const Matrix &, double);
-Matrix mapra::operator/(const Matrix &, double);
 
-bool mapra::operator==(const Matrix &, const Matrix &);
-bool mapra::operator!=(const Matrix &, const Matrix &);
+Matrix mapra::operator*(const mapra::Matrix &x, double y)
+{
+    mapra::Matrix z = x;
+    return z *= y;
+}
+
+Matrix mapra::operator*(double y, const mapra::Matrix &x)
+{
+    mapra::Matrix z = x;
+    return z *= y;
+}
+
+Matrix mapra::operator/(const mapra::Matrix &x, double y)
+{
+    mapra::Matrix z = x;
+    return z /= y;
+}
+
+bool mapra::operator==(const mapra::Matrix &x, const mapra::Matrix &y)
+{
+    if (x.rows_ != y.rows_ || x.cols_ != y.cols_)
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < x.rows_; i++)
+        for (size_t j = 0; j < x.cols_; j++)
+            if (x(i, j) != y(i, j))
+                return false;
+    return true;
+}
+
+bool mapra::operator!=(const mapra::Matrix &x, const mapra::Matrix &y)
+{
+    if (x == y)
+        return false;
+    else
+        return true;
+}
 
 std::ostream &mapra::operator<<(std::ostream &out, const Matrix &A)
 {
@@ -105,10 +177,55 @@ std::istream &mapra::operator>>(std::istream &in, Matrix &A)
     for (int i = 0; i < A.rows_; i++)
         for (int j = 0; j < A.cols_; j++)
             in >> A(i, j);
+    return in;
 }
 
-Vector mapra::operator*(const Matrix &, const Vector &);
-Vector mapra::operator*(const Vector &, const Matrix &);
+std::size_t Matrix::GetRows() const
+{
+    return this->rows_;
+}
+std::size_t Matrix::GetCols() const
+{
+    return this->cols_;
+}
+
+Vector mapra::operator*(const mapra::Matrix &x, const mapra::Vector &y)
+{
+    if (x.GetCols() != y.GetLength())
+    {
+        mapra::Matrix::MatError("Dimensionen sind ungueltig!");
+    }
+    mapra::Vector temp(x.GetRows());
+    for (size_t row = 0; row < x.GetRows(); row++)
+    {
+        double z = 0;
+        for (size_t j = 0; j < y.GetLength(); j++)
+        {
+            z = z + x(row, j) * y(j);
+        }
+        temp(row) = z;
+    }
+    return temp;
+}
+
+Vector mapra::operator*(const mapra::Vector &y, const mapra::Matrix &x)
+{
+    if (x.GetRows() != y.GetLength())
+    {
+        mapra::Matrix::MatError("Dimensionen sind ungueltig!");
+    }
+    mapra::Vector temp(x.GetCols());
+    for (size_t col = 0; col < x.GetCols(); col++)
+    {
+        double z = 0;
+        for (size_t j = 0; j < y.GetLength(); j++)
+        {
+            z = z + y(j) * x(j, col);
+        }
+        temp(col) = z;
+    }
+    return temp;
+}
 
 void Matrix::MatError(const char str[])
 {

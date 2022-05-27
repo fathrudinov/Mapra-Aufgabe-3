@@ -56,6 +56,23 @@ namespace mapra
     std::vector<std::vector<double>> elems_;
   };
 
+  Matrix operator+(const Matrix &, const Matrix &);
+  Matrix operator-(const Matrix &, const Matrix &);
+  Matrix operator-(const Matrix &);
+
+  Matrix operator*(const Matrix &, const Matrix &);
+  Matrix operator*(double, const Matrix &);
+  Matrix operator*(const Matrix &, double);
+  Matrix operator/(const Matrix &, double);
+
+  bool operator==(const Matrix &, const Matrix &);
+  bool operator!=(const Matrix &, const Matrix &);
+
+  std::istream &operator>>(std::istream &, Matrix &);
+  std::ostream &operator<<(std::ostream &, const Matrix &);
+
+  Vector operator*(const Matrix &, const Vector &);
+  Vector operator*(const Vector &, const Matrix &);
 } // namespace mapra
 
 #endif // MATRIX_H_
