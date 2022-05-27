@@ -9,51 +9,53 @@
 
 #include "vector.h"
 
-namespace mapra {
+namespace mapra
+{
 
-class Matrix {
- public:
-  explicit Matrix(std::size_t r = 1, std::size_t c = 1);
+  class Matrix
+  {
+  public:
+    explicit Matrix(std::size_t r = 1, std::size_t c = 1);
 
-  double& operator()(std::size_t, std::size_t);
-  double operator()(std::size_t, std::size_t) const;
+    double &operator()(std::size_t, std::size_t);
+    double operator()(std::size_t, std::size_t) const;
 
-  Matrix& operator+=(const Matrix&);
-  Matrix& operator-=(const Matrix&);
-  Matrix& operator*=(const Matrix&);
-  Matrix& operator*=(double);
-  Matrix& operator/=(double);
+    Matrix &operator+=(const Matrix &);
+    Matrix &operator-=(const Matrix &);
+    Matrix &operator*=(const Matrix &);
+    Matrix &operator*=(double);
+    Matrix &operator/=(double);
 
-  Matrix& Redim(std::size_t, std::size_t);
-  std::size_t GetRows() const;
-  std::size_t GetCols() const;
+    Matrix &Redim(std::size_t, std::size_t);
+    std::size_t GetRows() const;
+    std::size_t GetCols() const;
 
-  static void MatError(const char str[]);
+    static void MatError(const char str[]);
 
-  friend Matrix operator+(const Matrix&, const Matrix&);
-  friend Matrix operator-(const Matrix&, const Matrix&);
-  friend Matrix operator-(const Matrix&);
+    friend Matrix operator+(const Matrix &, const Matrix &);
+    friend Matrix operator-(const Matrix &, const Matrix &);
+    friend Matrix operator-(const Matrix &);
 
-  friend Matrix operator*(const Matrix&, const Matrix&);
-  friend Matrix operator*(double, const Matrix&);
-  friend Matrix operator*(const Matrix&, double);
-  friend Matrix operator/(const Matrix&, double);
+    friend Matrix operator*(const Matrix &, const Matrix &);
+    friend Matrix operator*(double, const Matrix &);
+    friend Matrix operator*(const Matrix &, double);
+    friend Matrix operator/(const Matrix &, double);
 
-  friend bool operator==(const Matrix&, const Matrix&);
-  friend bool operator!=(const Matrix&, const Matrix&);
+    friend bool operator==(const Matrix &, const Matrix &);
+    friend bool operator!=(const Matrix &, const Matrix &);
 
-  friend std::istream& operator>>(std::istream&, Matrix&);
-  friend std::ostream& operator<<(std::ostream&, const Matrix&);
+    friend std::istream &operator>>(std::istream &, Matrix &);
+    friend std::ostream &operator<<(std::ostream &, const Matrix &);
 
-  friend Vector operator*(const Matrix&, const Vector&);
-  friend Vector operator*(const Vector&, const Matrix&);
+    friend Vector operator*(const Matrix &, const Vector &);
+    friend Vector operator*(const Vector &, const Matrix &);
 
- private:
-  std::size_t rows_;
-  std::size_t cols_;
-  std::vector<double> elems_;
-};
+  private:
+    std::size_t rows_;
+    std::size_t cols_;
+    std::vector<std::vector<double>> elems_;
+  };
 
-}  // namespace mapra
+} // namespace mapra
 
-#endif  // MATRIX_H_
+#endif // MATRIX_H_
