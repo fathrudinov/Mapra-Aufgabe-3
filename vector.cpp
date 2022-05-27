@@ -43,28 +43,44 @@ double Vector::operator()(size_t i) const
 
 Vector &Vector::operator+=(const Vector &x)
 {
-  // ***** Hier fehlt was *****
+#ifndef NDEBUG
+  if (x.GetLength() != this->GetLength())
+  {
+    Vector::VecError("Inkompatible Dimensionen fuer 'Vektor + Vektor'!");
+  }
+#endif
+  for (size_t i = 0; i < x.GetLength(); i++)
+    (*this)(i) += x(i);
 }
 
 // ----- Zuweisungsoperator mit Subtraktion "-=" ----
 
 Vector &Vector::operator-=(const Vector &x)
 {
-  // ***** Hier fehlt was *****
+#ifndef NDEBUG
+  if (x.GetLength() != this->GetLength())
+  {
+    Vector::VecError("Inkompatible Dimensionen fuer 'Vektor + Vektor'!");
+  }
+#endif
+  for (size_t i = 0; i < x.GetLength(); i++)
+    (*this)(i) -= x(i);
 }
 
 // ----- Zuweisungsoperator mit Multiplikation "*=" ----
 
 Vector &Vector::operator*=(double c)
 {
-  // ***** Hier fehlt was *****
+  for (size_t i = 0; i < this->GetLength(); i++)
+    (*this)(i) *= c;
 }
 
 // ----- Zuweisungsoperator mit Divsion "/=" ----
 
 Vector &Vector::operator/=(double c)
 {
-  // ***** Hier fehlt was *****
+  for (size_t i = 0; i < this->GetLength(); i++)
+    (*this)(i) /= c;
 }
 
 // ==============================
@@ -73,10 +89,7 @@ Vector &Vector::operator/=(double c)
 
 // ----- Vektorlaenge aendern -----
 
-Vector &Vector::Redim(size_t l)
-{
-  // ***** Hier fehlt was *****
-}
+Vector &Vector::Redim(size_t l) { (*this).elems_.resize(l, 0); }
 
 std::size_t Vector::GetLength() const { return elems_.size(); }
 
@@ -88,14 +101,21 @@ std::size_t Vector::GetLength() const { return elems_.size(); }
 
 double Vector::Norm2() const
 {
-  // ***** Hier fehlt was *****
+  double sum = 0;
+  for (size_t i = 0; i < this->GetLength(); i++)
+    sum += (*this)(i) * (*this)(i);
+  return sqrt(sum);
 }
 
 // ----- Maximum-Norm -----
 
 double Vector::NormMax() const
 {
-  // ***** Hier fehlt was *****
+  double max = (*this)(0);
+  for (int i = 1; i < this->GetLength(); i++)
+    if (max < (*this)(i))
+      max = (*this)(i);
+  return max;
 }
 
 // ==================================
@@ -104,7 +124,7 @@ double Vector::NormMax() const
 
 // ----- Addition "+" -----
 
-Vector operator+(const Vector &x, const Vector &y)
+Vector mapra::operator+(const Vector &x, const Vector &y)
 {
 #ifndef NDEBUG
   if (x.elems_.size() != y.elems_.size())
@@ -119,44 +139,71 @@ Vector operator+(const Vector &x, const Vector &y)
 
 // ----- Subtraktion "-" -----
 
-Vector operator-(const Vector &x, const Vector &y)
+Vector mapra::operator-(const Vector &x, const Vector &y)
 {
-  // ***** Hier fehlt was *****
+#ifndef NDEBUG
+  if (x.elems_.size() != y.elems_.size())
+  {
+    Vector::VecError("Inkompatible Dimensionen fuer 'Vektor + Vektor'!");
+  }
+#endif
+
+  Vector z = x;
+  return z -= y;
 }
 
 // ----- Vorzeichen wechseln "-" -----
 
-Vector operator-(const Vector &x)
+Vector mapra::operator-(Vector &x)
 {
-  // ***** Hier fehlt was *****
+  Vector _x = x;
+  _x *= -1;
+  return _x;
 }
 
 // ----- Skalarprodukt "*" -----
 
-double operator*(const Vector &x, const Vector &y)
+double mapra::operator*(const Vector &x, const Vector &y)
 {
-  // ***** Hier fehlt was *****
+#ifndef NDEBUG
+  if (x.elems_.size() != y.elems_.size())
+  {
+    mapra::Vector::VecError("Inkompatible Dimensionen fuer 'Vektor + Vektor'!");
+  }
+#endif
+  double sum = 0;
+  for (unsigned int i = 0; i < x.elems_.size(); i++)
+  {
+    sum += x.elems_[i] * y.elems_[i];
+  }
+  return sum;
 }
 
 // ----- Multiplikation Skalar*Vektor "*" -----
 
 Vector operator*(double c, const Vector &x)
 {
-  // ***** Hier fehlt was *****
+  Vector cx = x;
+  cx *= c;
+  return cx;
 }
 
 // ----- Multiplikation Vektor*Skalar "*" -----
 
 Vector operator*(const Vector &x, double c)
 {
-  // ***** Hier fehlt was *****
+  Vector cx = x;
+  cx *= c;
+  return cx;
 }
 
 // ----- Division Vektor/Skalar "/" -----
 
 Vector operator/(const Vector &x, double c)
 {
-  // ***** Hier fehlt was *****
+  Vector div = x;
+  div /= c;
+  return div;
 }
 
 // ==============================
@@ -165,7 +212,7 @@ Vector operator/(const Vector &x, double c)
 
 // ----- Test auf Gleichheit "==" -----
 
-bool operator==(const Vector &x, const Vector &y)
+bool mapra::operator==(const Vector &x, const Vector &y)
 {
   if (x.elems_.size() != y.elems_.size())
   {
@@ -187,7 +234,10 @@ bool operator==(const Vector &x, const Vector &y)
 
 bool operator!=(const Vector &x, const Vector &y)
 {
-  // ***** Hier fehlt was *****
+  if (x == y)
+    return false;
+  else
+    return true;
 }
 
 // ==========================
@@ -196,7 +246,7 @@ bool operator!=(const Vector &x, const Vector &y)
 
 // ----- Ausgabe "<<" -----
 
-std::ostream &operator<<(std::ostream &s, const Vector &x)
+std::ostream &mapra::operator<<(std::ostream &s, const Vector &x)
 {
   s << std::setiosflags(std::ios::right);
   for (size_t i = 0; i < x.elems_.size(); i++)
@@ -209,7 +259,7 @@ std::ostream &operator<<(std::ostream &s, const Vector &x)
 
 // ----- Eingabe ">>" -----
 
-std::istream &operator>>(std::istream &s, Vector &x)
+std::istream &mapra::operator>>(std::istream &s, Vector &x)
 {
   std::cout << std::setiosflags(std::ios::right);
   for (size_t i = 0; i < x.elems_.size(); i++)
