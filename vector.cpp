@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <vector>
 #include <iomanip>
 
 using namespace mapra;
@@ -51,6 +50,7 @@ Vector &Vector::operator+=(const Vector &x)
 #endif
   for (size_t i = 0; i < x.GetLength(); i++)
     (*this)(i) += x(i);
+  return *this;
 }
 
 // ----- Zuweisungsoperator mit Subtraktion "-=" ----
@@ -65,6 +65,7 @@ Vector &Vector::operator-=(const Vector &x)
 #endif
   for (size_t i = 0; i < x.GetLength(); i++)
     (*this)(i) -= x(i);
+  return *this;
 }
 
 // ----- Zuweisungsoperator mit Multiplikation "*=" ----
@@ -73,6 +74,7 @@ Vector &Vector::operator*=(double c)
 {
   for (size_t i = 0; i < this->GetLength(); i++)
     (*this)(i) *= c;
+  return *this;
 }
 
 // ----- Zuweisungsoperator mit Divsion "/=" ----
@@ -81,6 +83,7 @@ Vector &Vector::operator/=(double c)
 {
   for (size_t i = 0; i < this->GetLength(); i++)
     (*this)(i) /= c;
+  return *this;
 }
 
 // ==============================
@@ -89,7 +92,7 @@ Vector &Vector::operator/=(double c)
 
 // ----- Vektorlaenge aendern -----
 
-Vector &Vector::Redim(size_t l) { (*this).elems_.resize(l, 0); }
+Vector &Vector::Redim(size_t l) { (*this).elems_.resize(l, 0); return *this;}
 
 std::size_t Vector::GetLength() const { return elems_.size(); }
 
@@ -104,6 +107,7 @@ double Vector::Norm2() const
   double sum = 0;
   for (size_t i = 0; i < this->GetLength(); i++)
     sum += (*this)(i) * (*this)(i);
+    
   return sqrt(sum);
 }
 
@@ -112,7 +116,7 @@ double Vector::Norm2() const
 double Vector::NormMax() const
 {
   double max = (*this)(0);
-  for (int i = 1; i < this->GetLength(); i++)
+  for (size_t i = 1; i < this->GetLength(); i++)
     if (max < (*this)(i))
       max = (*this)(i);
   return max;
@@ -181,7 +185,7 @@ double mapra::operator*(const Vector &x, const Vector &y)
 
 // ----- Multiplikation Skalar*Vektor "*" -----
 
-Vector operator*(double c, const Vector &x)
+Vector mapra::operator*(double c, const Vector &x)
 {
   Vector cx = x;
   cx *= c;
@@ -190,7 +194,7 @@ Vector operator*(double c, const Vector &x)
 
 // ----- Multiplikation Vektor*Skalar "*" -----
 
-Vector operator*(const Vector &x, double c)
+Vector mapra::operator*(const Vector &x, double c)
 {
   Vector cx = x;
   cx *= c;
@@ -199,7 +203,7 @@ Vector operator*(const Vector &x, double c)
 
 // ----- Division Vektor/Skalar "/" -----
 
-Vector operator/(const Vector &x, double c)
+Vector mapra::operator/(const Vector &x, double c)
 {
   Vector div = x;
   div /= c;
@@ -251,7 +255,7 @@ std::ostream &mapra::operator<<(std::ostream &s, const Vector &x)
   s << std::setiosflags(std::ios::right);
   for (size_t i = 0; i < x.elems_.size(); i++)
   {
-    s << "\n(" << std::setw(4) << i << ") " << x(i);
+    s << "\n(" << i << ") "  << std::setw(4) << x(i);
   }
 
   return s << std::endl;
@@ -261,10 +265,10 @@ std::ostream &mapra::operator<<(std::ostream &s, const Vector &x)
 
 std::istream &mapra::operator>>(std::istream &s, Vector &x)
 {
-  std::cout << std::setiosflags(std::ios::right);
+  // std::cout << std::setiosflags(std::ios::right);
   for (size_t i = 0; i < x.elems_.size(); i++)
   {
-    std::cout << "\n(" << std::setw(4) << i << ") " << std::flush;
+    // std::cout << "\n(" << std::setw(4) << i << ") " << std::flush;
     s >> x(i);
   }
   return s;

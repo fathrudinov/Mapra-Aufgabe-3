@@ -44,9 +44,9 @@ Matrix &Matrix::operator*=(const Matrix &x)
     }
     Matrix c = Matrix(rows_, x.cols_);
 
-    for (int j = 0; j < x.cols_; j++)
-        for (int i = 0; i < rows_; i++)
-            for (int k = 0; k < rows_; k++)
+    for (size_t j = 0; j < x.cols_; j++)
+        for (size_t i = 0; i < rows_; i++)
+            for (size_t k = 0; k < rows_; k++)
                 c(i, j) += (*this)(i, k) * x(k, j);
     *this = c;
     return (*this);
@@ -113,9 +113,9 @@ Matrix mapra::operator*(const Matrix &A, const Matrix &B)
     }
     Matrix C = Matrix(A.rows_, B.cols_);
 
-    for (int j = 0; j < B.cols_; j++)
-        for (int i = 0; i < A.rows_; i++)
-            for (int k = 0; k < A.rows_; k++)
+    for (size_t j = 0; j < B.cols_; j++)
+        for (size_t i = 0; i < A.rows_; i++)
+            for (size_t k = 0; k < A.rows_; k++)
                 C(i, j) += A(i, k) * B(k, j);
     return C;
 }
@@ -162,10 +162,10 @@ bool mapra::operator!=(const mapra::Matrix &x, const mapra::Matrix &y)
 
 std::ostream &mapra::operator<<(std::ostream &out, const Matrix &A)
 {
-    out << std::setprecision(4);
-    for (int i = 0; i < A.rows_; i++)
+    out << std::endl << std::setprecision(4);
+    for (size_t i = 0; i < A.rows_; i++)
     {
-        for (int j = 0; j < A.cols_; j++)
+        for (size_t j = 0; j < A.cols_; j++)
             out << A(i, j) << '\t';
         out << std::endl;
     }
@@ -174,8 +174,8 @@ std::ostream &mapra::operator<<(std::ostream &out, const Matrix &A)
 
 std::istream &mapra::operator>>(std::istream &in, Matrix &A)
 {
-    for (int i = 0; i < A.rows_; i++)
-        for (int j = 0; j < A.cols_; j++)
+    for (size_t i = 0; i < A.rows_; i++)
+        for (size_t j = 0; j < A.cols_; j++)
             in >> A(i, j);
     return in;
 }
