@@ -92,7 +92,13 @@ Vector &Vector::operator/=(double c)
 
 // ----- Vektorlaenge aendern -----
 
-Vector &Vector::Redim(size_t l) { (*this).elems_.resize(l, 0); return *this;}
+Vector &Vector::Redim(size_t l)
+{
+  (*this).elems_.resize(l);
+  for(size_t i = 0; i < l; i++)
+    (*this).elems_[i] = 0;
+  return *this;
+}
 
 std::size_t Vector::GetLength() const { return elems_.size(); }
 
@@ -107,7 +113,7 @@ double Vector::Norm2() const
   double sum = 0;
   for (size_t i = 0; i < this->GetLength(); i++)
     sum += (*this)(i) * (*this)(i);
-    
+
   return sqrt(sum);
 }
 
@@ -255,7 +261,7 @@ std::ostream &mapra::operator<<(std::ostream &s, const Vector &x)
   s << std::setiosflags(std::ios::right);
   for (size_t i = 0; i < x.elems_.size(); i++)
   {
-    s << "\n(" << i << ") "  << std::setw(4) << x(i);
+    s << "\n(" << i << ") " << std::setw(4) << x(i);
   }
 
   return s << std::endl;

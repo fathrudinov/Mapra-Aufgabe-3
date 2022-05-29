@@ -32,7 +32,6 @@ public:
     set_Konstant_Vector(v2, 1.0);
     set_Konstant_Vector(v3, 2.0);
   }
-
   void test_operator_plus()
   {
     Tests.AssertEq("test_operator_plus", v2 + v2, v3);
@@ -55,7 +54,14 @@ public:
   }
   void test_operator_NormMax()
   {
-    Tests.AssertEq("test_operator_NormMax ", v1.NormMax(), 10.0);
+    Tests.AssertEq("test_operator_NormMax", v1.NormMax(), 10.0);
+    v2(4) = 100;
+    Tests.AssertEq("test_operator_NormMax", v2.NormMax(), 100.0);
+  }
+  void test_redim()
+  {
+    set_Konstant_Vector(v1, 0);
+    Tests.AssertEq("test_redim", v2.Redim(2), v1);
   }
   void Summary()
   {
@@ -65,6 +71,7 @@ public:
     test_operator_div();
     test_operator_Norm2();
     test_operator_NormMax();
+    test_redim();
   }
 };
 

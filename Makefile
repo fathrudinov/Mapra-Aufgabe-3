@@ -1,6 +1,9 @@
 CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -O2 -fno-inline -fPIC -fPIE
 
-test: main.o matrix.o vector.o unit.o
+test: matrix.o vector.o unit.o test.o
+	$(CXX) $(CXXFLAGS) $^ -g -o $@ 
+
+mytest: matrix.o vector.o unit.o main.o
 	$(CXX) $(CXXFLAGS) $^ -g -o $@ 
 
 main.o: main.cpp matrix.h vector.h unit_test.h power_series.h
