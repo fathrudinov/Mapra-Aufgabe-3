@@ -19,6 +19,10 @@ int main(int argc, char *argv[])
             matrix_tests Test = matrix_tests();
             Test.Summary();
         }
+        if (std::stoi(argv[1]) == 3)
+        {
+            power_series_tests();
+        }
     }
     return 0;
 }

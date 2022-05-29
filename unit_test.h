@@ -3,6 +3,8 @@
 #include "mapra_test.h"
 #include <fstream>
 #include <cmath>
+#include "power_series.h"
+#include "unit.h"
 
 using namespace mapra;
 
@@ -50,7 +52,7 @@ public:
   void test_operator_Norm2()
   {
     Tests.AssertEq("test_operator_Norm2", v2.Norm2(), sqrt(5.0));
-  } 
+  }
   void test_operator_NormMax()
   {
     Tests.AssertEq("test_operator_NormMax ", v1.NormMax(), 10.0);
@@ -84,7 +86,7 @@ public:
     fin2 >> A_mal_v;
 
     fin3.open("test_5x5_2.txt");
-    fin3 >> zwei_mal_A;    
+    fin3 >> zwei_mal_A;
 
     set_Konstant_Vector(v, 1);
   }
@@ -119,6 +121,14 @@ public:
   }
 };
 
-class power_series_tests
+void power_series_tests()
 {
-};
+  int n = 1;
+  
+  std::cout << "I am here1\n";
+  auto [B, x, eps] = mapra::GetExample(n);
+  std::cout << "I am here2\n";
+
+  auto [v, lambda, c] = power_series(B, x, eps);
+  mapra::CheckSolution(v, lambda, c);
+}
