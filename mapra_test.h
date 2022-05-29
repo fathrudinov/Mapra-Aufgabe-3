@@ -48,8 +48,9 @@ namespace mapra
     }
 
     template <typename T>
-    void AssertEq(const std::string &test_name, const T &expected_value,
-                  const T &computed_value)
+    void AssertEq(const std::string &test_name,
+                  const T &computed_value, 
+                  const T &expected_value)
     {
       const bool kPassed = expected_value == computed_value;
       this->Assert(test_name, kPassed);
