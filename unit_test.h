@@ -125,7 +125,7 @@ public:
     Matrix S = Matrix();
     Matrix eins_mal_zwei = Matrix(1, 2);
     S(0, 0) = -1.3;
-    Tests.AssertEq("test_redim", S.Redim(1, 2), eins_mal_zwei); // something wrong
+    Tests.AssertEq("test_redim", S.Redim(1, 2), eins_mal_zwei);
   }
 
   void Summary()
@@ -141,10 +141,10 @@ public:
 
 void power_series_tests()
 {
-  int n = 1;
-
-  auto [B, x, eps] = mapra::GetExample(n); // something wrong
-
-  auto [v, lambda, c] = power_series(B, x, eps);
-  mapra::CheckSolution(v, lambda, c);
+  for (size_t i = 1; i < kNumExamples + 1; i++)
+  {
+    auto [B, x, eps] = mapra::GetExample(i);
+    auto [v, lambda, c] = power_series(B, x, eps);
+    mapra::CheckSolution(v, lambda, c);
+  }
 }
