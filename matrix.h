@@ -16,6 +16,7 @@ namespace mapra
   {
   public:
     explicit Matrix(std::size_t r = 1, std::size_t c = 1);
+    Matrix & operator=(const Matrix &);
 
     double &operator()(std::size_t, std::size_t);
     double operator()(std::size_t, std::size_t) const;

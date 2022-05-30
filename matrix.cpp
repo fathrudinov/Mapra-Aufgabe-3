@@ -15,6 +15,13 @@ double Matrix::operator()(std::size_t r, std::size_t c) const
 {
     return elems_.at(r).at(c);
 }
+Matrix & Matrix::operator=(const Matrix & A)
+{
+    this->Redim(A.rows_, A.cols_);
+    elems_ = A.elems_;
+    return *this;
+}
+
 
 Matrix &Matrix::operator+=(const Matrix &x)
 {
@@ -86,7 +93,7 @@ Matrix mapra::operator+(const mapra::Matrix &x, const mapra::Matrix &y)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
-    mapra::Matrix z = x;
+    Matrix z(x);
     return z += y;
 }
 
@@ -96,19 +103,19 @@ Matrix mapra::operator-(const mapra::Matrix &x, const mapra::Matrix &y)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
-    mapra::Matrix z = x;
+    Matrix z(x);
     return z -= y;
 }
 
 Matrix mapra::operator-(const mapra::Matrix &x)
 {
-    mapra::Matrix z = x;
+    Matrix z(x);
     return z *= (-1);
 }
 
 Matrix mapra::operator*(const Matrix &A, const Matrix &B)
 {
-    if (A.rows_ != B.cols_)
+    if (A.cols_ != B.rows_)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
@@ -116,26 +123,26 @@ Matrix mapra::operator*(const Matrix &A, const Matrix &B)
 
     for (size_t j = 0; j < B.cols_; j++)
         for (size_t i = 0; i < A.rows_; i++)
-            for (size_t k = 0; k < A.rows_; k++)
+            for (size_t k = 0; k < A.cols_; k++)
                 C(i, j) += A(i, k) * B(k, j);
     return C;
 }
 
 Matrix mapra::operator*(const mapra::Matrix &x, double y)
 {
-    mapra::Matrix z = x;
+    Matrix z(x);
     return z *= y;
 }
 
 Matrix mapra::operator*(double y, const mapra::Matrix &x)
 {
-    mapra::Matrix z = x;
+    Matrix z(x);
     return z *= y;
 }
 
 Matrix mapra::operator/(const mapra::Matrix &x, double y)
 {
-    mapra::Matrix z = x;
+    Matrix z(x);
     return z /= y;
 }
 
