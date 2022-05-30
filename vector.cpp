@@ -121,10 +121,10 @@ double Vector::Norm2() const
 
 double Vector::NormMax() const
 {
-  double max = (*this)(0);
+  double max = abs((*this)(0));
   for (size_t i = 1; i < this->GetLength(); i++)
-    if (max < (*this)(i))
-      max = (*this)(i);
+    if (max < abs((*this)(i)))
+      max = abs((*this)(i));
   return max;
 }
 

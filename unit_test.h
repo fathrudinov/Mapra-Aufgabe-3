@@ -55,7 +55,7 @@ public:
   void test_operator_NormMax()
   {
     Tests.AssertEq("test_operator_NormMax", v1.NormMax(), 10.0);
-    v2(4) = 100;
+    v2(4) = -100;
     Tests.AssertEq("test_operator_NormMax", v2.NormMax(), 100.0);
   }
   void test_redim()
@@ -118,6 +118,16 @@ public:
   {
     Tests.AssertEq("test_operator_div", zwei_mal_A / 2, A);
   }
+  void test_redim()
+  {
+    Matrix null3x3 = Matrix(3, 3);
+    Tests.AssertEq("test_redim", A.Redim(3, 3), null3x3);
+    Matrix S = Matrix();
+    Matrix eins_mal_zwei = Matrix(1, 2);
+    S(0, 0) = -1.3;
+    Tests.AssertEq("test_redim", S.Redim(1, 2), eins_mal_zwei); // something wrong
+  }
+
   void Summary()
   {
     test_operator_plus();
@@ -125,16 +135,15 @@ public:
     test_operator_mult_scalar();
     test_operator_mult();
     test_operator_div();
+    test_redim();
   }
 };
 
 void power_series_tests()
 {
   int n = 1;
-  
-  std::cout << "I am here1\n";
-  auto [B, x, eps] = mapra::GetExample(n);
-  std::cout << "I am here2\n";
+
+  auto [B, x, eps] = mapra::GetExample(n); // something wrong
 
   auto [v, lambda, c] = power_series(B, x, eps);
   mapra::CheckSolution(v, lambda, c);

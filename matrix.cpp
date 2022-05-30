@@ -71,11 +71,12 @@ Matrix &Matrix::operator/=(double x)
     return *this;
 }
 
-Matrix &Matrix::Redim(std::size_t r, std::size_t c)
+Matrix &mapra::Matrix::Redim(std::size_t r, std::size_t c)
 {
-    elems_.resize(r, std::vector<double>(c, 0));
     rows_ = r;
     cols_ = c;
+    elems_.clear();
+    elems_.resize(r, std::vector<double>(c, 0));
     return *this;
 }
 
@@ -140,11 +141,11 @@ Matrix mapra::operator/(const mapra::Matrix &x, double y)
 
 bool mapra::operator==(const mapra::Matrix &x, const mapra::Matrix &y)
 {
+
     if (x.rows_ != y.rows_ || x.cols_ != y.cols_)
     {
         return false;
     }
-
     for (size_t i = 0; i < x.rows_; i++)
         for (size_t j = 0; j < x.cols_; j++)
             if (x(i, j) != y(i, j))
@@ -162,7 +163,8 @@ bool mapra::operator!=(const mapra::Matrix &x, const mapra::Matrix &y)
 
 std::ostream &mapra::operator<<(std::ostream &out, const Matrix &A)
 {
-    out << std::endl << std::setprecision(4);
+    out << std::endl
+        << std::setprecision(4);
     for (size_t i = 0; i < A.rows_; i++)
     {
         for (size_t j = 0; j < A.cols_; j++)
