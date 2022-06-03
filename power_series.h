@@ -3,46 +3,40 @@
 #include <cmath>
 #include <tuple>
 
-std::tuple<mapra::Vector, double, int> power_series(const mapra::Matrix &A, mapra::Vector x_old, double eps)
+using namespace mapra;
+
+
+// Zur Matrix A soll dann mit Hilfe der Potenzmethode der betragsgroesste Eigenwert samt Eigenvektor bestimmt werden
+std::tuple<Vector, double, int> power_series(const Matrix &A, Vector x_old, double eps)
 {
-  
-  mapra::Vector x_new = (A * x_old);
-  mapra::Vector x_new_s = x_new;
-  mapra::Vector x_old_s;
-  double lambda_new = x_new.NormMax();
-  int k = 0;
-  
-  if (2 * std::abs(x_new(k)) <= lambda_new)
-  {
-    for (size_t i = 0; i < x_new.GetLength(); i++)
-    {
-      if (std::abs(x_new(i)) == lambda_new)
-        k = i;
-    }
-  }
-  x_new = x_new / x_new(k);
-  int counter = 2;
-  double ew = x_new(k);
+  Vector x = x_old;       // Man startet die Potenzmethode mit einem beliebigen Vektor x_old
+  Vector x_tilde = A * x; // \tilde x aus Aufgabenstellung
+  size_t k = 0;           // man startet mit k = 1
+  int64_t counter = 0;    // Anzahl der benötigten Iterationen
+  double c = 2.0;         // eine (nicht zu grosse) Konstante, z. B. c = 2
+  double EW;
 
   do
   {
-    x_old = x_new;
-    x_new = A * x_old;
-    ew = x_new(k);
-    lambda_new = x_new.NormMax();
-    x_old_s = x_new_s;
-    x_new_s = x_new;
-    if (2 * std::abs(x_new(k)) <= lambda_new)
-    {
-      k = 0;
-      for (size_t i = 0; i < x_new.GetLength(); i++)
-      {
-        if (std::abs(x_new(i)) == lambda_new)
+    x_old = x;
+    counter += 1;
+
+    double NormMax = x_tilde.NormMax();
+    if (c * std::abs(x_tilde(k)) <= NormMax) // man wählt k jeweils neu, wenn dies gilt, und zwar so, dass |x(k)| = x.NormMax()
+      for (size_t i = 0; i < x.GetLength(); i++)
+        if (std::abs(x_tilde(i)) == NormMax)
+        {
           k = i;
-      }
-    }
-    x_new = x_new / x_new(k);
-    counter++;
-  } while ((x_new - x_old).NormMax() > eps || std::abs(x_new_s(k) - x_old_s(k)) > eps);
-  return std::make_tuple(x_new, ew, counter - 1);
+          break;
+        }
+
+    x = x_tilde / x_tilde(k); // Da der Eigenvektor nur bis auf Vielfache bestimmt ist, kann man oBdA x(k) = 1 annehmen
+
+    EW = x_tilde(k);
+
+    x_tilde = A * x;
+
+  } while ((x - x_old).NormMax() > eps || std::abs(EW - x_tilde(k)) > eps);
+
+  return std::make_tuple(x, EW, counter);
 }
