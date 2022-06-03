@@ -15,19 +15,19 @@ double Matrix::operator()(std::size_t r, std::size_t c) const
 {
     return elems_.at(r).at(c);
 }
-Matrix & Matrix::operator=(const Matrix & A)
+Matrix &Matrix::operator=(const Matrix &A)
 {
     this->Redim(A.rows_, A.cols_);
     elems_ = A.elems_;
     return *this;
 }
 
-
 Matrix &Matrix::operator+=(const Matrix &x)
 {
+#ifndef NDEBUG
     if (x.rows_ != rows_ || x.cols_ != cols_)
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
-
+#endif
     for (size_t i = 0; i < rows_; i++)
         for (size_t j = 0; j < cols_; j++)
             (*this)(i, j) += x(i, j);
@@ -35,9 +35,10 @@ Matrix &Matrix::operator+=(const Matrix &x)
 }
 Matrix &Matrix::operator-=(const Matrix &x)
 {
+#ifndef NDEBUG
     if (x.rows_ != rows_ || x.cols_ != cols_)
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
-
+#endif
     for (size_t i = 0; i < rows_; i++)
         for (size_t j = 0; j < cols_; j++)
             (*this)(i, j) -= x(i, j);
@@ -45,10 +46,12 @@ Matrix &Matrix::operator-=(const Matrix &x)
 }
 Matrix &Matrix::operator*=(const Matrix &x)
 {
+#ifndef NDEBUG
     if (x.rows_ != cols_)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
+#endif
     Matrix c = Matrix(rows_, x.cols_);
 
     for (size_t j = 0; j < x.cols_; j++)
@@ -68,10 +71,12 @@ Matrix &Matrix::operator*=(double x)
 }
 Matrix &Matrix::operator/=(double x)
 {
+#ifndef NDEBUG
     if (x == 0)
     {
         Matrix::MatError("Division durch 0 nicht definiert!");
     }
+#endif
     for (size_t i = 0; i < rows_; i++)
         for (size_t j = 0; j < cols_; j++)
             (*this)(i, j) /= x;
@@ -89,20 +94,24 @@ Matrix &mapra::Matrix::Redim(std::size_t r, std::size_t c)
 
 Matrix mapra::operator+(const mapra::Matrix &x, const mapra::Matrix &y)
 {
+#ifndef NDEBUG
     if (x.rows_ != y.rows_ || x.cols_ != y.cols_)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
+#endif
     Matrix z(x);
     return z += y;
 }
 
 Matrix mapra::operator-(const mapra::Matrix &x, const mapra::Matrix &y)
 {
+#ifndef NDEBUG
     if (x.rows_ != y.rows_ || x.cols_ != y.cols_)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
+#endif
     Matrix z(x);
     return z -= y;
 }
@@ -115,10 +124,12 @@ Matrix mapra::operator-(const mapra::Matrix &x)
 
 Matrix mapra::operator*(const Matrix &A, const Matrix &B)
 {
+#ifndef NDEBUG
     if (A.cols_ != B.rows_)
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
+#endif
     Matrix C = Matrix(A.rows_, B.cols_);
 
     for (size_t j = 0; j < B.cols_; j++)
@@ -200,10 +211,12 @@ std::size_t Matrix::GetCols() const
 
 Vector mapra::operator*(const mapra::Matrix &x, const mapra::Vector &y)
 {
+#ifndef NDEBUG
     if (x.GetCols() != y.GetLength())
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
+#endif
     mapra::Vector temp(x.GetRows());
     for (size_t row = 0; row < x.GetRows(); row++)
     {
@@ -219,10 +232,12 @@ Vector mapra::operator*(const mapra::Matrix &x, const mapra::Vector &y)
 
 Vector mapra::operator*(const mapra::Vector &y, const mapra::Matrix &x)
 {
+#ifndef NDEBUG
     if (x.GetRows() != y.GetLength())
     {
         mapra::Matrix::MatError("Dimensionen sind ungueltig!");
     }
+#endif
     mapra::Vector temp(x.GetCols());
     for (size_t col = 0; col < x.GetCols(); col++)
     {

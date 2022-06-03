@@ -1,5 +1,9 @@
 // Copyright (c) 2022, The MaPra Authors.
 
+// Um keine grossen Geschwindigkeitseinbussen zu erleiden, 
+// sollten Sie diese Überprüfung per Präprozessoranweisung #define NDEBUG abschalten können, 
+// wenn Sie sicher sind, dass ihr Programm fehlerfrei läuft.
+
 #ifndef VECTOR_H_
 #define VECTOR_H_
 

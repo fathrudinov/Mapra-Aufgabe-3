@@ -95,7 +95,7 @@ Vector &Vector::operator/=(double c)
 Vector &Vector::Redim(size_t l)
 {
   (*this).elems_.resize(l);
-  for(size_t i = 0; i < l; i++)
+  for (size_t i = 0; i < l; i++)
     (*this).elems_[i] = 0;
   return *this;
 }
@@ -121,10 +121,11 @@ double Vector::Norm2() const
 
 double Vector::NormMax() const
 {
-  double max = abs((*this)(0));
+  double max = std::abs((*this)(0));
   for (size_t i = 1; i < this->GetLength(); i++)
-    if (max < abs((*this)(i)))
-      max = abs((*this)(i));
+    if (max < std::abs((*this)(i)))
+      max = std::abs((*this)(i));
+
   return max;
 }
 
