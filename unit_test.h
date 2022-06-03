@@ -57,6 +57,10 @@ public:
     Tests.AssertEq("test_operator_NormMax", v1.NormMax(), 10.0);
     v2(4) = -100;
     Tests.AssertEq("test_operator_NormMax", v2.NormMax(), 100.0);
+    Vector v4(2);
+    v4(0) = 0;
+    v4(1) = -0.4;
+    Tests.AssertEq("test_operator_NormMax", v4.NormMax(), 0.4);
   }
   void test_redim()
   {
@@ -139,11 +143,11 @@ public:
   }
 };
 
-void power_series_tests()
+void power_series_tests(size_t n)
 {
-  for (size_t i = 1; i < kNumExamples + 1; i++)
+  if(n < kNumExamples + 1)
   {
-    auto [B, x, eps] = mapra::GetExample(i);
+    auto [B, x, eps] = mapra::GetExample(n);
     auto [v, lambda, c] = power_series(B, x, eps);
     mapra::CheckSolution(v, lambda, c);
   }
